@@ -14,5 +14,6 @@ public class Status {
     public static final int SUCCESS = 9000;
     public static final int FAIL = 9001;
     public static final int NOT_FOUND = 9002;
+    public static final int FORBIDDEN = 9003;
     
 }

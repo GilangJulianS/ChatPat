@@ -74,32 +74,41 @@ public class ChatClient {
     			nick = client.createUser(new_nick);
     		} else if (input.startsWith("/join ")){
     			String channel=input.split(" ")[1];
-    			if (client.join(nick, channel)==Status.SUCCESS){
+    			int res=client.join(nick, channel);
+    			if (res == Status.SUCCESS){
 //        			System.out.println(nick+" joined channel |"+channel+"|");
-                } else {
-                    System.out.println("You failed to join channel " + channel);
+                } else if (res==Status.FAIL){
+                    System.out.println("You already joined channel " + channel);
                 }
             } else if (input.startsWith("/leave ")) {
                 String channel = input.split(" ")[1];
-                if (client.leave(nick, channel) == Status.SUCCESS) {
+    			int res=client.leave(nick, channel);
+                if (res == Status.SUCCESS) {
 //        			System.out.println(nick+" left channel |"+channel+"|");
-                } else {
-                    System.out.println("You failed to leave channel " + channel);
+                } else if (res == Status.FAIL) {
+                    System.out.println("You haven't joined channel " + channel);
+                } else if (res == Status.NOT_FOUND) {
+                    System.out.println("Channel " + channel + " doesn't exist");
                 }
             } else if (input.startsWith("@") && input.contains(" ")) {
                 String[] in_ar = input.split(" ", 2);
                 String channel = in_ar[0].substring(1);
                 String msg = in_ar[1];
-                if (client.sendMessage(nick, channel, msg) == Status.SUCCESS) {
+    			int res=client.sendMessage(nick, channel, msg);
+                if (res == Status.SUCCESS) {
 //        			System.out.println("["+channel+"] ("+nick+") |"+msg+"|");
-                } else {
-                    System.out.println("You failed to send '" + msg + "' to channel " + channel);
+                } else if (res == Status.FORBIDDEN){
+                    System.out.println("You haven't joined to channel " + channel);
+                } else if (res == Status.NOT_FOUND){
+                    System.out.println("Channel " + channel + " doesn't exist");
+                } else if (res == Status.FAIL){
+                    System.out.println("Failed to send '"+msg+"' to channel " + channel);
                 }
             } else {
                 if (client.sendMessage(nick, null, input) == Status.SUCCESS) {
 //        			System.out.println("[ALL] ("+nick+") |"+input+"|");
                 } else {
-                    System.out.println("You failed to send " + input + " to all channel");
+                    System.out.println("You haven't joined any channel yet");
                 }
             }
             if ((!exit) && (nick != -1)) {

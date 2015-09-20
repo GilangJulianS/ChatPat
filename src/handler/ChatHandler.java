@@ -45,7 +45,7 @@ public class ChatHandler implements ChatService.Iface{
             }
             return Status.SUCCESS;
         }else if(channel.isUserExist(userId)){
-            user.addPendingMessage("Admin||" + channelName + "||You already joined this channel");
+//            user.addPendingMessage("Admin||" + channelName + "||You already joined this channel");
             return Status.FAIL;
         }else{
             channel.addUser(user);
@@ -65,10 +65,16 @@ public class ChatHandler implements ChatService.Iface{
         if(channel == null){
             return Status.NOT_FOUND;
         }else if(!channel.isUserExist(userId)){
-            searchUser(userId).addPendingMessage("Admin||" + channelName + "||You haven't joined this channel");
+//            searchUser(userId).addPendingMessage("Admin||" + channelName + "||You haven't joined this channel");
             return Status.FAIL;
         }else{
-            searchUser(userId).addPendingMessage("Admin||" + channelName + "||You have left this channel");
+            User user = searchUser(userId);
+            user.addPendingMessage("Admin||" + channelName + "||You have left this channel");
+            for(User u : channel.getUsers()){
+                if(u != user){
+                    u.addPendingMessage("Admin||" + channelName + "||" + user.getNick() + " has left this channel");
+                }
+            }
             return channel.removeUser(userId);
         }
     }
@@ -102,16 +108,24 @@ public class ChatHandler implements ChatService.Iface{
                 }
             }
             if(!joinedAChannel){
-                user.addPendingMessage("Admin|| ||You haven't joined any channel yet");
+//                user.addPendingMessage("Admin|| ||You haven't joined any channel yet");
+            	return Status.FAIL;
+            } else {
+            	return Status.SUCCESS;
             }
-            return Status.SUCCESS;
         }else{
             Channel channel = searchChannel(channelName);
-            String newMessage = user.getNick() + "||" + channelName + "||" + message;
-            for(User u : channel.getUsers()){
-                u.addPendingMessage(newMessage);
+            if (channel==null){
+            	return Status.NOT_FOUND;
+            } else if(channel.isUserExist(userId)){
+	            String newMessage = user.getNick() + "||" + channelName + "||" + message;
+	            for(User u : channel.getUsers()){
+	                u.addPendingMessage(newMessage);
+	            }
+	            return Status.SUCCESS;
+            }else{
+            	return Status.FORBIDDEN;
             }
-            return Status.SUCCESS;
         }
             
     }
@@ -142,8 +156,9 @@ public class ChatHandler implements ChatService.Iface{
         }
         if(found){
             return Status.SUCCESS;
+        } else {
+        	return Status.FAIL;
         }
-        return Status.FAIL;
     }
     
     public Channel searchChannel(String channelName){
@@ -167,7 +182,4 @@ public class ChatHandler implements ChatService.Iface{
         }
         return user;
     }
-    
-    
-    
 }

@@ -66,48 +66,49 @@ public class ChatClient {
     		} else if (input.equals("/nick")){
     			String new_nick="";
     			nick = client.createUser(new_nick);
-    	    	System.out.println("Logged in "+nick);
     		} else if (input.startsWith("/nick ")){
     			String new_nick=input.split(" ")[1];
     			nick = client.createUser(new_nick);
-    	    	System.out.println("Logged in "+nick);
     		} else if (input.startsWith("/join ")){
     			String channel=input.split(" ")[1];
     			if (client.join(nick, channel)==Status.SUCCESS){
 //        			System.out.println(nick+" joined channel |"+channel+"|");
-    			} else {
-        			System.out.println("You failed to join channel "+channel);
-            	}
-    		} else if (input.startsWith("/leave ")){
-    			String channel=input.split(" ")[1];
-    			if (client.leave(nick, channel)==Status.SUCCESS){
+                } else {
+                    System.out.println("You failed to join channel " + channel);
+                }
+            } else if (input.startsWith("/leave ")) {
+                String channel = input.split(" ")[1];
+                if (client.leave(nick, channel) == Status.SUCCESS) {
 //        			System.out.println(nick+" left channel |"+channel+"|");
-    			} else {
-        			System.out.println("You failed to leave channel "+channel);
-            	}
-    		} else if (input.startsWith("@")&&input.contains(" ")){
-    			String[] in_ar=input.split(" ",2);
-    			String channel=in_ar[0].substring(1);
-    			String msg=in_ar[1];
-    			if (client.sendMessage(nick, channel, msg)==Status.SUCCESS){
+                } else {
+                    System.out.println("You failed to leave channel " + channel);
+                }
+            } else if (input.startsWith("@") && input.contains(" ")) {
+                String[] in_ar = input.split(" ", 2);
+                String channel = in_ar[0].substring(1);
+                String msg = in_ar[1];
+                if (client.sendMessage(nick, channel, msg) == Status.SUCCESS) {
 //        			System.out.println("["+channel+"] ("+nick+") |"+msg+"|");
-    			} else {
-        			System.out.println("You failed to send '"+msg+"' to channel "+channel);
-            	}
-    		} else {
-    			if (client.sendMessage(nick,null,input)==Status.SUCCESS){
+                } else {
+                    System.out.println("You failed to send '" + msg + "' to channel " + channel);
+                }
+            } else {
+                if (client.sendMessage(nick, null, input) == Status.SUCCESS) {
 //        			System.out.println("[ALL] ("+nick+") |"+input+"|");
-    			} else {
-        			System.out.println("You failed to send "+input+" to all channel");
-            	}
-    		}
-    		if ((!exit)&&(nick!=-1)){
-	    		timer.cancel();timer.purge();timer=new Timer();
-	    		timer.schedule(new FetchTask(client,nick),0,fetch_interval);
-    		}
-    	}
-		timer.cancel();timer.purge();
-    	scanner.close();
-    	System.out.println("exiting program");
-	}
+                } else {
+                    System.out.println("You failed to send " + input + " to all channel");
+                }
+            }
+            if ((!exit) && (nick != -1)) {
+                timer.cancel();
+                timer.purge();
+                timer = new Timer();
+                timer.schedule(new FetchTask(client, nick), 0, fetch_interval);
+            }
+        }
+        timer.cancel();
+        timer.purge();
+        scanner.close();
+        System.out.println("Exit program");
+    }
 }

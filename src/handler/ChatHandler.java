@@ -38,10 +38,23 @@ public class ChatHandler implements ChatService.Iface{
             channel.addUser(user);
             channels.add(channel);
             user.addPendingMessage("Admin||" + channelName + "||You have joined this channel");
+            for(User u : channel.getUsers()){
+                if(u != user){
+                    u.addPendingMessage("Admin||" + channelName + "||" + user.getNick() + " has joined this channel");
+                }
+            }
             return Status.SUCCESS;
+        }else if(channel.isUserExist(userId)){
+            user.addPendingMessage("Admin||" + channelName + "||You already joined this channel");
+            return Status.FAIL;
         }else{
             channel.addUser(user);
             user.addPendingMessage("Admin||" + channelName + "||You have joined this channel");
+            for(User u : channel.getUsers()){
+                if(u != user){
+                    u.addPendingMessage("Admin||" + channelName + "||" + user.getNick() + " has joined this channel");
+                }
+            }
             return Status.SUCCESS;
         }
     }
@@ -51,6 +64,9 @@ public class ChatHandler implements ChatService.Iface{
         Channel channel = searchChannel(channelName);
         if(channel == null){
             return Status.NOT_FOUND;
+        }else if(!channel.isUserExist(userId)){
+            searchUser(userId).addPendingMessage("Admin||" + channelName + "||You haven't joined this channel");
+            return Status.FAIL;
         }else{
             searchUser(userId).addPendingMessage("Admin||" + channelName + "||You have left this channel");
             return channel.removeUser(userId);

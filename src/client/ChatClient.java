@@ -61,12 +61,15 @@ public class ChatClient {
     	while (!exit){
         	String input = scanner.nextLine();
     		if (input.equals("/exit")){
-    			nick = client.deleteUser(nick);
-    	    	exit=true;
+    			if (client.deleteUser(nick)==Status.SUCCESS){
+    				exit=true;
+    			}
     		} else if (input.equals("/nick")){
+    			if (nick!=-1)client.deleteUser(nick);
     			String new_nick="";
     			nick = client.createUser(new_nick);
     		} else if (input.startsWith("/nick ")){
+    			if (nick!=-1)client.deleteUser(nick);
     			String new_nick=input.split(" ")[1];
     			nick = client.createUser(new_nick);
     		} else if (input.startsWith("/join ")){

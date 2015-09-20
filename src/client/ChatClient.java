@@ -65,11 +65,11 @@ public class ChatClient {
     				exit=true;
     			}
     		} else if (input.equals("/nick")){
-    			client.deleteUser(nick);
+    			if (nick!=-1)client.deleteUser(nick);
     			String new_nick="";
     			nick = client.createUser(new_nick);
     		} else if (input.startsWith("/nick ")){
-    			client.deleteUser(nick);
+    			if (nick!=-1)client.deleteUser(nick);
     			String new_nick=input.split(" ")[1];
     			nick = client.createUser(new_nick);
     		} else if (input.startsWith("/join ")){

@@ -57,7 +57,7 @@ public class ChatHandler implements ChatService.Iface{
 
     @Override
     public String getMessage(int userId, int lastMessageId) throws TException {
-        return null;
+        return "";
     }
 
     @Override

@@ -11,8 +11,8 @@ package model;
  */
 public class Status {
     
-    public static final int SUCCESS = 1;
-    public static final int FAIL = 2;
-    public static final int NOT_FOUND = 3;
+    public static final int SUCCESS = 9000;
+    public static final int FAIL = 9001;
+    public static final int NOT_FOUND = 9002;
     
 }

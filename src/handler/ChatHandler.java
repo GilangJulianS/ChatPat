@@ -72,6 +72,8 @@ public class ChatHandler implements ChatService.Iface{
         User user = searchUser(userId);
         if(user == null)
             return Status.NOT_FOUND;
+        if(message == null || message.equals(""))
+            return Status.FAIL;
         if(channelName == null || channelName.equals("")){
             boolean joinedAChannel = false;
             for(Channel channel : channels){

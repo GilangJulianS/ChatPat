@@ -49,7 +49,7 @@ public class ChatService {
 
     public int deleteUser(int userId) throws org.apache.thrift.TException;
 
-    public String getMessage(int userId, int lastMessageId) throws org.apache.thrift.TException;
+    public String getMessage(int userId) throws org.apache.thrift.TException;
 
   }
 
@@ -65,7 +65,7 @@ public class ChatService {
 
     public void deleteUser(int userId, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
 
-    public void getMessage(int userId, int lastMessageId, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
+    public void getMessage(int userId, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException;
 
   }
 
@@ -208,17 +208,16 @@ public class ChatService {
       throw new org.apache.thrift.TApplicationException(org.apache.thrift.TApplicationException.MISSING_RESULT, "deleteUser failed: unknown result");
     }
 
-    public String getMessage(int userId, int lastMessageId) throws org.apache.thrift.TException
+    public String getMessage(int userId) throws org.apache.thrift.TException
     {
-      send_getMessage(userId, lastMessageId);
+      send_getMessage(userId);
       return recv_getMessage();
     }
 
-    public void send_getMessage(int userId, int lastMessageId) throws org.apache.thrift.TException
+    public void send_getMessage(int userId) throws org.apache.thrift.TException
     {
       getMessage_args args = new getMessage_args();
       args.setUserId(userId);
-      args.setLastMessageId(lastMessageId);
       sendBase("getMessage", args);
     }
 
@@ -422,27 +421,24 @@ public class ChatService {
       }
     }
 
-    public void getMessage(int userId, int lastMessageId, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
+    public void getMessage(int userId, org.apache.thrift.async.AsyncMethodCallback resultHandler) throws org.apache.thrift.TException {
       checkReady();
-      getMessage_call method_call = new getMessage_call(userId, lastMessageId, resultHandler, this, ___protocolFactory, ___transport);
+      getMessage_call method_call = new getMessage_call(userId, resultHandler, this, ___protocolFactory, ___transport);
       this.___currentMethod = method_call;
       ___manager.call(method_call);
     }
 
     public static class getMessage_call extends org.apache.thrift.async.TAsyncMethodCall {
       private int userId;
-      private int lastMessageId;
-      public getMessage_call(int userId, int lastMessageId, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
+      public getMessage_call(int userId, org.apache.thrift.async.AsyncMethodCallback resultHandler, org.apache.thrift.async.TAsyncClient client, org.apache.thrift.protocol.TProtocolFactory protocolFactory, org.apache.thrift.transport.TNonblockingTransport transport) throws org.apache.thrift.TException {
         super(client, protocolFactory, transport, resultHandler, false);
         this.userId = userId;
-        this.lastMessageId = lastMessageId;
       }
 
       public void write_args(org.apache.thrift.protocol.TProtocol prot) throws org.apache.thrift.TException {
         prot.writeMessageBegin(new org.apache.thrift.protocol.TMessage("getMessage", org.apache.thrift.protocol.TMessageType.CALL, 0));
         getMessage_args args = new getMessage_args();
         args.setUserId(userId);
-        args.setLastMessageId(lastMessageId);
         args.write(prot);
         prot.writeMessageEnd();
       }
@@ -599,7 +595,7 @@ public class ChatService {
 
       public getMessage_result getResult(I iface, getMessage_args args) throws org.apache.thrift.TException {
         getMessage_result result = new getMessage_result();
-        result.success = iface.getMessage(args.userId, args.lastMessageId);
+        result.success = iface.getMessage(args.userId);
         return result;
       }
     }
@@ -933,7 +929,7 @@ public class ChatService {
       }
 
       public void start(I iface, getMessage_args args, org.apache.thrift.async.AsyncMethodCallback<String> resultHandler) throws TException {
-        iface.getMessage(args.userId, args.lastMessageId,resultHandler);
+        iface.getMessage(args.userId,resultHandler);
       }
     }
 
@@ -4965,7 +4961,6 @@ public class ChatService {
     private static final org.apache.thrift.protocol.TStruct STRUCT_DESC = new org.apache.thrift.protocol.TStruct("getMessage_args");
 
     private static final org.apache.thrift.protocol.TField USER_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("userId", org.apache.thrift.protocol.TType.I32, (short)1);
-    private static final org.apache.thrift.protocol.TField LAST_MESSAGE_ID_FIELD_DESC = new org.apache.thrift.protocol.TField("lastMessageId", org.apache.thrift.protocol.TType.I32, (short)2);
 
     private static final Map<Class<? extends IScheme>, SchemeFactory> schemes = new HashMap<Class<? extends IScheme>, SchemeFactory>();
     static {
@@ -4974,12 +4969,10 @@ public class ChatService {
     }
 
     public int userId; // required
-    public int lastMessageId; // required
 
     /** The set of fields this struct contains, along with convenience methods for finding and manipulating them. */
     public enum _Fields implements org.apache.thrift.TFieldIdEnum {
-      USER_ID((short)1, "userId"),
-      LAST_MESSAGE_ID((short)2, "lastMessageId");
+      USER_ID((short)1, "userId");
 
       private static final Map<String, _Fields> byName = new HashMap<String, _Fields>();
 
@@ -4996,8 +4989,6 @@ public class ChatService {
         switch(fieldId) {
           case 1: // USER_ID
             return USER_ID;
-          case 2: // LAST_MESSAGE_ID
-            return LAST_MESSAGE_ID;
           default:
             return null;
         }
@@ -5039,14 +5030,11 @@ public class ChatService {
 
     // isset id assignments
     private static final int __USERID_ISSET_ID = 0;
-    private static final int __LASTMESSAGEID_ISSET_ID = 1;
     private byte __isset_bitfield = 0;
     public static final Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> metaDataMap;
     static {
       Map<_Fields, org.apache.thrift.meta_data.FieldMetaData> tmpMap = new EnumMap<_Fields, org.apache.thrift.meta_data.FieldMetaData>(_Fields.class);
       tmpMap.put(_Fields.USER_ID, new org.apache.thrift.meta_data.FieldMetaData("userId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
-          new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32          , "int")));
-      tmpMap.put(_Fields.LAST_MESSAGE_ID, new org.apache.thrift.meta_data.FieldMetaData("lastMessageId", org.apache.thrift.TFieldRequirementType.DEFAULT, 
           new org.apache.thrift.meta_data.FieldValueMetaData(org.apache.thrift.protocol.TType.I32          , "int")));
       metaDataMap = Collections.unmodifiableMap(tmpMap);
       org.apache.thrift.meta_data.FieldMetaData.addStructMetaDataMap(getMessage_args.class, metaDataMap);
@@ -5056,14 +5044,11 @@ public class ChatService {
     }
 
     public getMessage_args(
-      int userId,
-      int lastMessageId)
+      int userId)
     {
       this();
       this.userId = userId;
       setUserIdIsSet(true);
-      this.lastMessageId = lastMessageId;
-      setLastMessageIdIsSet(true);
     }
 
     /**
@@ -5072,7 +5057,6 @@ public class ChatService {
     public getMessage_args(getMessage_args other) {
       __isset_bitfield = other.__isset_bitfield;
       this.userId = other.userId;
-      this.lastMessageId = other.lastMessageId;
     }
 
     public getMessage_args deepCopy() {
@@ -5083,8 +5067,6 @@ public class ChatService {
     public void clear() {
       setUserIdIsSet(false);
       this.userId = 0;
-      setLastMessageIdIsSet(false);
-      this.lastMessageId = 0;
     }
 
     public int getUserId() {
@@ -5110,29 +5092,6 @@ public class ChatService {
       __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __USERID_ISSET_ID, value);
     }
 
-    public int getLastMessageId() {
-      return this.lastMessageId;
-    }
-
-    public getMessage_args setLastMessageId(int lastMessageId) {
-      this.lastMessageId = lastMessageId;
-      setLastMessageIdIsSet(true);
-      return this;
-    }
-
-    public void unsetLastMessageId() {
-      __isset_bitfield = EncodingUtils.clearBit(__isset_bitfield, __LASTMESSAGEID_ISSET_ID);
-    }
-
-    /** Returns true if field lastMessageId is set (has been assigned a value) and false otherwise */
-    public boolean isSetLastMessageId() {
-      return EncodingUtils.testBit(__isset_bitfield, __LASTMESSAGEID_ISSET_ID);
-    }
-
-    public void setLastMessageIdIsSet(boolean value) {
-      __isset_bitfield = EncodingUtils.setBit(__isset_bitfield, __LASTMESSAGEID_ISSET_ID, value);
-    }
-
     public void setFieldValue(_Fields field, Object value) {
       switch (field) {
       case USER_ID:
@@ -5143,14 +5102,6 @@ public class ChatService {
         }
         break;
 
-      case LAST_MESSAGE_ID:
-        if (value == null) {
-          unsetLastMessageId();
-        } else {
-          setLastMessageId((Integer)value);
-        }
-        break;
-
       }
     }
 
@@ -5158,9 +5109,6 @@ public class ChatService {
       switch (field) {
       case USER_ID:
         return Integer.valueOf(getUserId());
-
-      case LAST_MESSAGE_ID:
-        return Integer.valueOf(getLastMessageId());
 
       }
       throw new IllegalStateException();
@@ -5175,8 +5123,6 @@ public class ChatService {
       switch (field) {
       case USER_ID:
         return isSetUserId();
-      case LAST_MESSAGE_ID:
-        return isSetLastMessageId();
       }
       throw new IllegalStateException();
     }
@@ -5203,15 +5149,6 @@ public class ChatService {
           return false;
       }
 
-      boolean this_present_lastMessageId = true;
-      boolean that_present_lastMessageId = true;
-      if (this_present_lastMessageId || that_present_lastMessageId) {
-        if (!(this_present_lastMessageId && that_present_lastMessageId))
-          return false;
-        if (this.lastMessageId != that.lastMessageId)
-          return false;
-      }
-
       return true;
     }
 
@@ -5223,11 +5160,6 @@ public class ChatService {
       list.add(present_userId);
       if (present_userId)
         list.add(userId);
-
-      boolean present_lastMessageId = true;
-      list.add(present_lastMessageId);
-      if (present_lastMessageId)
-        list.add(lastMessageId);
 
       return list.hashCode();
     }
@@ -5246,16 +5178,6 @@ public class ChatService {
       }
       if (isSetUserId()) {
         lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.userId, other.userId);
-        if (lastComparison != 0) {
-          return lastComparison;
-        }
-      }
-      lastComparison = Boolean.valueOf(isSetLastMessageId()).compareTo(other.isSetLastMessageId());
-      if (lastComparison != 0) {
-        return lastComparison;
-      }
-      if (isSetLastMessageId()) {
-        lastComparison = org.apache.thrift.TBaseHelper.compareTo(this.lastMessageId, other.lastMessageId);
         if (lastComparison != 0) {
           return lastComparison;
         }
@@ -5282,10 +5204,6 @@ public class ChatService {
 
       sb.append("userId:");
       sb.append(this.userId);
-      first = false;
-      if (!first) sb.append(", ");
-      sb.append("lastMessageId:");
-      sb.append(this.lastMessageId);
       first = false;
       sb.append(")");
       return sb.toString();
@@ -5340,14 +5258,6 @@ public class ChatService {
                 org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
               }
               break;
-            case 2: // LAST_MESSAGE_ID
-              if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-                struct.lastMessageId = iprot.readI32();
-                struct.setLastMessageIdIsSet(true);
-              } else { 
-                org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
-              }
-              break;
             default:
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
           }
@@ -5365,9 +5275,6 @@ public class ChatService {
         oprot.writeStructBegin(STRUCT_DESC);
         oprot.writeFieldBegin(USER_ID_FIELD_DESC);
         oprot.writeI32(struct.userId);
-        oprot.writeFieldEnd();
-        oprot.writeFieldBegin(LAST_MESSAGE_ID_FIELD_DESC);
-        oprot.writeI32(struct.lastMessageId);
         oprot.writeFieldEnd();
         oprot.writeFieldStop();
         oprot.writeStructEnd();
@@ -5390,29 +5297,19 @@ public class ChatService {
         if (struct.isSetUserId()) {
           optionals.set(0);
         }
-        if (struct.isSetLastMessageId()) {
-          optionals.set(1);
-        }
-        oprot.writeBitSet(optionals, 2);
+        oprot.writeBitSet(optionals, 1);
         if (struct.isSetUserId()) {
           oprot.writeI32(struct.userId);
-        }
-        if (struct.isSetLastMessageId()) {
-          oprot.writeI32(struct.lastMessageId);
         }
       }
 
       @Override
       public void read(org.apache.thrift.protocol.TProtocol prot, getMessage_args struct) throws org.apache.thrift.TException {
         TTupleProtocol iprot = (TTupleProtocol) prot;
-        BitSet incoming = iprot.readBitSet(2);
+        BitSet incoming = iprot.readBitSet(1);
         if (incoming.get(0)) {
           struct.userId = iprot.readI32();
           struct.setUserIdIsSet(true);
-        }
-        if (incoming.get(1)) {
-          struct.lastMessageId = iprot.readI32();
-          struct.setLastMessageIdIsSet(true);
         }
       }
     }

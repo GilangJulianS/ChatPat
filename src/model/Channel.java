@@ -40,6 +40,17 @@ public class Channel {
         }
         return status;
     }
+    
+    public boolean isUserExist(int userId){
+        boolean found = false;
+        for(int i=0; i<users.size(); i++){
+            if(users.get(i).getId() == userId){
+                found = true;
+                break;
+            }
+        }
+        return found;
+    }
 
     public static int getIdCounter() {
         return idCounter;

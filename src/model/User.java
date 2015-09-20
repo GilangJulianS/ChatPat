@@ -48,4 +48,17 @@ public class User {
         Random r = new Random();
         return defaultNicks[r.nextInt(nickCount)];
     }
+    
+    public String getPendingMessages(){
+        StringBuilder builder = new StringBuilder();
+        for(String message : messages){
+            builder.append(message + "///");
+        }
+        messages = new ArrayList<>();
+        return builder.toString();
+    }
+    
+    public void addPendingMessage(String message){
+        messages.add(message);
+    }
 }

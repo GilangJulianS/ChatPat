@@ -37,9 +37,11 @@ public class ChatHandler implements ChatService.Iface{
             channel = new Channel(channelName);
             channel.addUser(user);
             channels.add(channel);
+            user.addPendingMessage("Admin||" + channelName + "||You have joined this channel");
             return Status.SUCCESS;
         }else{
             channel.addUser(user);
+            user.addPendingMessage("Admin||" + channelName + "||You have joined this channel");
             return Status.SUCCESS;
         }
     }
@@ -50,6 +52,7 @@ public class ChatHandler implements ChatService.Iface{
         if(channel == null){
             return Status.NOT_FOUND;
         }else{
+            searchUser(userId).addPendingMessage("Admin||" + channelName + "||You have left this channel");
             return channel.removeUser(userId);
         }
     }
@@ -57,7 +60,11 @@ public class ChatHandler implements ChatService.Iface{
     @Override
     public String getMessage(int userId) throws TException {
         User user = searchUser(userId);
-        return user.getPendingMessages();
+        String message = user.getPendingMessages();
+        if(message != null){
+            return message;
+        }
+        return "";
     }
 
     @Override
@@ -66,11 +73,18 @@ public class ChatHandler implements ChatService.Iface{
         if(user == null)
             return Status.NOT_FOUND;
         if(channelName == null || channelName.equals("")){
+            boolean joinedAChannel = false;
             for(Channel channel : channels){
-                String newMessage = user.getNick() + "||" + channel.getName() + "||" + message;
-                for(User u : channel.getUsers()){
-                    u.addPendingMessage(newMessage);
+                if(channel.isUserExist(userId)){
+                    joinedAChannel = true;
+                    String newMessage = user.getNick() + "||" + channel.getName() + "||" + message;
+                    for(User u : channel.getUsers()){
+                        u.addPendingMessage(newMessage);
+                    }
                 }
+            }
+            if(!joinedAChannel){
+                user.addPendingMessage("Admin|| ||You haven't joined any channel yet");
             }
             return Status.SUCCESS;
         }else{
@@ -94,6 +108,7 @@ public class ChatHandler implements ChatService.Iface{
             user = new User(nick);
             users.add(user);
         }
+        user.addPendingMessage("Admin|| ||You have logged in as " + user.getNick());
         return user.getId();
     }
 

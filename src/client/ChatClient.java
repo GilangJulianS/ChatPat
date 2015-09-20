@@ -36,7 +36,7 @@ public class ChatClient {
     	Scanner scanner = new Scanner(System.in);
     	boolean exit=false;
     	int nick=-1;
-    	long fetch_interval=10000;
+    	long fetch_interval=1000;
 		class FetchTask extends TimerTask{
 			private ChatService.Client client;
 			private int nick;
@@ -46,7 +46,12 @@ public class ChatClient {
 			public void run() {
     			try{
     				//fetch message
-    				System.out.print(client.getMessage(nick,1));
+    				for (String str:client.getMessage(nick).split("///")){
+    					if (str.length()>0){
+	    					String[] stp=str.split("\\|\\|");
+	    					System.out.println("["+stp[1]+"] ("+stp[0]+") "+stp[2]);
+    					}
+    				}
     			} catch (Exception e){
     				e.printStackTrace();
     			}
@@ -103,6 +108,6 @@ public class ChatClient {
     	}
 		timer.cancel();timer.purge();
     	scanner.close();
-    	System.out.println("Exit program");
+    	System.out.println("exiting program");
 	}
 }

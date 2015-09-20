@@ -26,8 +26,19 @@ public class Channel {
         users = new ArrayList<>();
     }
     
-    public void join(User user){
+    public void addUser(User user){
         users.add(user);
+    }
+    
+    public int removeUser(int userId){
+        int status = Status.NOT_FOUND;
+        for(int i=0; i<users.size(); i++){
+            if(users.get(i).getId() == userId){
+                users.remove(i);
+                status = Status.SUCCESS;
+            }
+        }
+        return status;
     }
 
     public static int getIdCounter() {

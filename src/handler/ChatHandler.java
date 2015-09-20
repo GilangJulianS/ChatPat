@@ -29,17 +29,34 @@ public class ChatHandler implements ChatService.Iface{
     
     @Override
     public int join(int userId, String channelName) throws TException {
-        return 0;
+        User user = searchUser(userId);
+        Channel channel = searchChannel(channelName);
+        if(user == null || channel == null){
+            return Status.NOT_FOUND;
+        }else{
+            channel.addUser(user);
+            return Status.SUCCESS;
+        }
+    }
+    
+    @Override
+    public int leave(int userId, String channelName) throws TException {
+        Channel channel = searchChannel(channelName);
+        if(channel == null){
+            return Status.NOT_FOUND;
+        }else{
+            return channel.removeUser(userId);
+        }
     }
 
     @Override
-    public int leave(String channelName) throws TException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public String getMessage(int userId, int lastMessageId) throws TException {
+        return null;
     }
 
     @Override
     public int sendMessage(int userId, String channelName, String message) throws TException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return 0;
     }
 
     @Override
@@ -69,6 +86,28 @@ public class ChatHandler implements ChatService.Iface{
             return Status.SUCCESS;
         }
         return Status.FAIL;
+    }
+    
+    public Channel searchChannel(String channelName){
+        Channel channel = null;
+        for(int i=0; i<channels.size(); i++){
+            if(channels.get(i).getName().equals(channelName)){
+                channel = channels.get(i);
+                break;
+            }
+        }
+        return channel;
+    }
+    
+    public User searchUser(int userId){
+        User user = null;
+        for(int i=0; i<users.size(); i++){
+            if(users.get(i).getId() == userId){
+                user = users.get(i);
+                break;
+            }
+        }
+        return user;
     }
     
     

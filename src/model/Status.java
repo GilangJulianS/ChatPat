@@ -13,5 +13,6 @@ public class Status {
     
     public static final int SUCCESS = 1;
     public static final int FAIL = 2;
+    public static final int NOT_FOUND = 3;
     
 }

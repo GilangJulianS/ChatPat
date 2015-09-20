@@ -5,6 +5,8 @@
  */
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -17,15 +19,20 @@ public class User {
     private static int idCounter = 0;
     private int id;
     private String nick;
+    private List<String> messages;
 
     public User(){
         id = idCounter;
         idCounter++;
         nick = getRandomNick();
+        messages = new ArrayList<>();
     }
     
     public User(String nickName){
+        id = idCounter;
+        idCounter++;
         nick = nickName;
+        messages = new ArrayList<>();
     }
     
     public int getId() {

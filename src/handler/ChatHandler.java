@@ -29,10 +29,16 @@ public class ChatHandler implements ChatService.Iface{
     
     @Override
     public int join(int userId, String channelName) throws TException {
+        // ini harus buat channel baru bukan not found
         User user = searchUser(userId);
         Channel channel = searchChannel(channelName);
-        if(user == null || channel == null){
+        if(user == null){
             return Status.NOT_FOUND;
+        }else if(channel == null){
+            channel = new Channel(channelName);
+            channel.addUser(user);
+            channels.add(channel);
+            return Status.SUCCESS;
         }else{
             channel.addUser(user);
             return Status.SUCCESS;
@@ -56,6 +62,7 @@ public class ChatHandler implements ChatService.Iface{
 
     @Override
     public int sendMessage(int userId, String channelName, String message) throws TException {
+        // kasih tambahan if channelName null jadi ke all
         return 0;
     }
 
